@@ -20,36 +20,36 @@
  * IN THE SOFTWARE.
  */
 
-#ifndef FRM2PNG_COLOR_H
-#define FRM2PNG_COLOR_H
+#ifndef FRM2PNG_FRMFALLOUTFILE_H
+#define FRM2PNG_FRMFALLOUTFILE_H
 
 // C++ standard includes
-#include <cstdint>
+#include <map>
+#include <vector>
 
 // frm2png includes
+#include "FalloutFile.h"
+#include "FrmFrame.h"
 
 // Third party includes
 
 namespace frm2png
 {
 
-class Color
+class FrmFalloutFile : public FalloutFile
 {
 protected:
-    uint8_t _red = 0;
-    uint8_t _green = 0;
-    uint8_t _blue = 0;
-    uint8_t _alpha = 0;
+    uint8_t _colorModifier = 4;
+    uint16_t _framesPerDirection;
+    // direction => frames
+    std::map<uint8_t, std::vector<FrmFrame>> _frames;
 public:
-    Color(uint32_t rgba);
-    Color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
-    Color(const Color& other);
+    FrmFalloutFile(const std::string& filename);
+    virtual ~FrmFalloutFile();
 
-    uint8_t red() const;
-    uint8_t green() const;
-    uint8_t blue() const;
-    uint8_t alpha() const;
+    std::map<uint8_t, std::vector<FrmFrame>>& frames();
+    uint16_t framesPerDirection();
 };
 
 }
-#endif // FRM2PNG_COLOR_H
+#endif // FRM2PNG_FRMFALLOUTFILE_H

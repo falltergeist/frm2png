@@ -20,36 +20,57 @@
  * IN THE SOFTWARE.
  */
 
-#ifndef FRM2PNG_COLOR_H
-#define FRM2PNG_COLOR_H
-
 // C++ standard includes
-#include <cstdint>
+#include <algorithm>
 
 // frm2png includes
+#include "Exception.h"
+#include "FalloutFile.h"
 
 // Third party includes
 
 namespace frm2png
 {
 
-class Color
+FalloutFile::FalloutFile(const std::string& filename)
 {
-protected:
-    uint8_t _red = 0;
-    uint8_t _green = 0;
-    uint8_t _blue = 0;
-    uint8_t _alpha = 0;
-public:
-    Color(uint32_t rgba);
-    Color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
-    Color(const Color& other);
+    _stream.open(filename, std::ios_base::in | std::ios_base::binary);
+    if (!_stream.is_open())
+    {
+        throw Exception("FalloutFile::FalloutFile() - Can't open input file:" + filename);
+    }
+}
 
-    uint8_t red() const;
-    uint8_t green() const;
-    uint8_t blue() const;
-    uint8_t alpha() const;
-};
+FalloutFile::~FalloutFile()
+{
+    _stream.close();
+}
+
+uint8_t FalloutFile::uint8()
+{
+    uint8_t value;
+    char* buff = reinterpret_cast<char*>(&value);
+    _stream.read(buff, 1);
+    return value;
+}
+
+
+uint16_t FalloutFile::uint16()
+{
+    uint16_t value;
+    char* buff = reinterpret_cast<char*>(&value);
+    _stream.read(buff, 2);
+    std::reverse(buff, buff + 2);
+    return value;
+}
+
+uint32_t FalloutFile::uint32()
+{
+    uint32_t value;
+    char* buff = reinterpret_cast<char*>(&value);
+    _stream.read(buff, 4);
+    std::reverse(buff, buff + 4);
+    return value;
+}
 
 }
-#endif // FRM2PNG_COLOR_H

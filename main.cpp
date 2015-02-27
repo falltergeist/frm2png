@@ -21,52 +21,25 @@
  */
 
 // C++ standard includes
-#include <algorithm>
 #include <cstdint>
-#include <fstream>
 #include <iostream>
 #include <string>
 
 // frm2png includes
-#include "Color.h"
+#include "Exception.h"
+#include "FrmFalloutFile.h"
 #include "PngImage.h"
 #include "PngWriter.h"
-#include "pallete.h"
 
 // Third party includes
 #include <png.h>
 
 using namespace frm2png;
 
-uint8_t readUINT8(std::ifstream& stream)
-{
-    uint8_t value;
-    char* buff = reinterpret_cast<char*>(&value);
-    stream.read(buff, 1);
-    return value;
-}
-
-uint16_t readUINT16(std::ifstream& stream)
-{
-    uint16_t value;
-    char* buff = reinterpret_cast<char*>(&value);
-    stream.read(buff, 2);
-    std::reverse(buff, buff + 2);
-    return value;
-}
-
-uint32_t readUINT32(std::ifstream& stream)
-{
-    uint32_t value;
-    char* buff = reinterpret_cast<char*>(&value);
-    stream.read(buff, 4);
-    std::reverse(buff, buff + 4);
-    return value;
-}
 
 void usage(std::string binaryName)
 {
-    std::cout << "FRM to PNG converter v0.0.2" << std::endl;
+    std::cout << "FRM to PNG converter v0.1.0" << std::endl;
     std::cout << "Copyright (c) 2015 Falltergeist developers" << std::endl;
     std::cout << "Usage: " << binaryName << " <FRM filename>" << std::endl;
 }
@@ -80,84 +53,50 @@ int main(int argc, char** argv)
     }
 
     std::string filename = argv[1];
-    std::ifstream in;
+    std::string outname = filename.substr(0, filename.find('.')) + ".png";
 
-    in.open(filename.c_str(), std::ios_base::binary | std::ios_base::in);
-    if (!in.is_open())
+    try
     {
-        std::cout << "Can't open input file: " << filename << std::endl;
+        FrmFalloutFile frm(filename);
+
+        unsigned maxWidth = frm.frames().at(0).at(0).width();
+        unsigned maxHeight = frm.frames().at(0).at(0).height();
+
+        for (unsigned i = 0; i != frm.frames().size(); ++i)
+        {
+            for (unsigned j = 0; j != frm.frames().at(i).size(); ++j)
+            {
+                auto frame = frm.frames().at(i).at(j);
+                if (frame.width() > maxWidth) maxWidth = frame.width();
+                if (frame.height() > maxHeight) maxHeight = frame.height();
+            }
+        }
+
+        PngImage image(maxWidth*frm.framesPerDirection(), maxHeight*frm.frames().size());
+
+        for (unsigned i = 0; i != frm.frames().size(); ++i)
+        {
+            for (unsigned j = 0; j != frm.frames().at(i).size(); ++j)
+            {
+                auto frame = frm.frames().at(i).at(j);
+                for (unsigned y = 0; y != frame.height(); ++y)
+                {
+                    for (unsigned x = 0; x != frame.width(); ++x)
+                    {
+                        image.setPixel(maxWidth*j + x, maxHeight*i + y, frame.pixel(x, y));
+                    }
+                }
+            }
+        }
+
+        PngWriter writer(outname);
+        writer.write(image);
+    }
+    catch(Exception& e)
+    {
+        std::cout << e.what() << std::endl;
         return 1;
     }
 
-    std::string outname = filename.substr(0, filename.find('.')) + ".png";
-
-    readUINT32(in); // version
-    readUINT16(in); // frames per second
-    readUINT16(in); // action frame
-    uint16_t framesPerDirection = readUINT16(in); // frames per direction
-
-    for (unsigned i = 0; i != 6; ++i)
-    {
-        readUINT16(in); // direction x shift
-    }
-
-    for (unsigned i = 0; i != 6; ++i)
-    {
-        readUINT16(in); // direction y shift
-    }
-
-    for (unsigned i = 0; i != 6; ++i)
-    {
-        readUINT32(in); // direction data offset
-    }
-
-    readUINT32(in); // frm data size
-
-// @todo: add other directions and frames
-//
-//    for (unsigned i = 0; i != directions; ++i)
-//    {
-//        for (unsigned j = 0; j != framesPerDirection; ++j)
-//        {
-    uint16_t frameWidth = readUINT16(in);
-    uint16_t frameHeight = readUINT16(in);
-    uint32_t frameDataSize = readUINT32(in);
-    readUINT16(in); // x offset
-    readUINT16(in); // y offset
-
-    PngImage image(frameWidth, frameHeight);
-    PngWriter writer(outname);
-
-    //Create row data
-    png_bytep* rows = new png_bytep[frameHeight];
-    for(unsigned y = 0; y != frameHeight; ++y)
-    {
-        rows[y] = new png_byte[frameWidth*4];
-
-        for (unsigned int x = 0; x != frameWidth; ++x)
-        {
-            uint8_t index = readUINT8(in);
-
-            if (!index)
-            {
-                image.setPixel(x, y, Color(0));
-                continue;
-            }
-
-            image.setPixel(x, y, Color(pallete.at(index).red * 4, pallete.at(index).green * 4, pallete.at(index).blue * 4));
-        }
-    }
-
-    writer.write(image);
-
-
-//        }
-//    }
-
-
-
-
-
-    in.close();
     return 0;
 }

@@ -20,11 +20,12 @@
  * IN THE SOFTWARE.
  */
 
-#ifndef FRM2PNG_COLOR_H
-#define FRM2PNG_COLOR_H
+#ifndef FRM2PNG_FALLOUTFILE_H
+#define FRM2PNG_FALLOUTFILE_H
 
 // C++ standard includes
 #include <cstdint>
+#include <fstream>
 
 // frm2png includes
 
@@ -33,23 +34,19 @@
 namespace frm2png
 {
 
-class Color
+class FalloutFile
 {
 protected:
-    uint8_t _red = 0;
-    uint8_t _green = 0;
-    uint8_t _blue = 0;
-    uint8_t _alpha = 0;
+    std::ifstream _stream;
 public:
-    Color(uint32_t rgba);
-    Color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
-    Color(const Color& other);
+    FalloutFile(const std::string& filename);
+    virtual ~FalloutFile();
 
-    uint8_t red() const;
-    uint8_t green() const;
-    uint8_t blue() const;
-    uint8_t alpha() const;
+    uint8_t uint8();
+    uint16_t uint16();
+    uint32_t uint32();
+
 };
 
 }
-#endif // FRM2PNG_COLOR_H
+#endif // FRM2PNG_FALLOUTFILE_H

@@ -20,36 +20,61 @@
  * IN THE SOFTWARE.
  */
 
-#ifndef FRM2PNG_COLOR_H
-#define FRM2PNG_COLOR_H
-
 // C++ standard includes
-#include <cstdint>
 
 // frm2png includes
+#include "Exception.h"
+#include "FrmFrame.h"
 
 // Third party includes
 
 namespace frm2png
 {
 
-class Color
+FrmFrame::FrmFrame(unsigned width, unsigned height)
 {
-protected:
-    uint8_t _red = 0;
-    uint8_t _green = 0;
-    uint8_t _blue = 0;
-    uint8_t _alpha = 0;
-public:
-    Color(uint32_t rgba);
-    Color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
-    Color(const Color& other);
+    _width = width;
+    _height = height;
+    for(unsigned i = 0; i != _width * _height; ++i)
+    {
+        _pixels.push_back(Color(0));
+    }
+}
 
-    uint8_t red() const;
-    uint8_t green() const;
-    uint8_t blue() const;
-    uint8_t alpha() const;
-};
+FrmFrame::FrmFrame(const FrmFrame& other)
+{
+    _width = other._width;
+    _height = other._height;
+    _pixels = other._pixels;
+}
+
+FrmFrame::~FrmFrame()
+{
+}
+
+Color FrmFrame::pixel(unsigned x, unsigned y) const
+{
+    if (x >= _width && y >= _height)
+    {
+        throw Exception("FrmFrame::pixel() - out of borders");
+    }
+
+    return _pixels.at(_width*y + x);
+}
+
+void FrmFrame::setPixel(unsigned x, unsigned y, const Color& color)
+{
+    _pixels.at(_width*y + x) = color;
+}
+
+unsigned FrmFrame::width()
+{
+    return _width;
+}
+
+unsigned FrmFrame::height()
+{
+    return _height;
+}
 
 }
-#endif // FRM2PNG_COLOR_H

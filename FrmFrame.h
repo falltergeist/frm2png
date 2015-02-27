@@ -20,36 +20,37 @@
  * IN THE SOFTWARE.
  */
 
-#ifndef FRM2PNG_COLOR_H
-#define FRM2PNG_COLOR_H
+#ifndef FRM2PNG_FRMFRAME_H
+#define FRM2PNG_FRMFRAME_H
 
 // C++ standard includes
-#include <cstdint>
+#include <vector>
 
 // frm2png includes
+#include "Color.h"
 
 // Third party includes
 
 namespace frm2png
 {
 
-class Color
+class FrmFrame
 {
 protected:
-    uint8_t _red = 0;
-    uint8_t _green = 0;
-    uint8_t _blue = 0;
-    uint8_t _alpha = 0;
+    unsigned _width;
+    unsigned _height;
+    std::vector<Color> _pixels;
 public:
-    Color(uint32_t rgba);
-    Color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
-    Color(const Color& other);
+    FrmFrame(unsigned width, unsigned height);
+    FrmFrame(const FrmFrame& other);
+    ~FrmFrame();
 
-    uint8_t red() const;
-    uint8_t green() const;
-    uint8_t blue() const;
-    uint8_t alpha() const;
+    Color pixel(unsigned x, unsigned y) const;
+    void setPixel(unsigned x, unsigned y, const Color& color);
+
+    unsigned width();
+    unsigned height();
 };
 
 }
-#endif // FRM2PNG_COLOR_H
+#endif // FRM2PNG_FRMFRAME_H
