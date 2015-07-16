@@ -37,7 +37,7 @@ FalloutFile::FalloutFile(const std::string& filename)
     _stream.open(filename, std::ios_base::in | std::ios_base::binary);
     if (!_stream.is_open())
     {
-        throw Exception("FalloutFile::FalloutFile() - Can't open input file:" + filename);
+        throw Exception("FalloutFile::FalloutFile() - Can't open input file: " + filename);
     }
 }
 

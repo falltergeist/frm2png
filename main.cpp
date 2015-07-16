@@ -36,12 +36,20 @@
 
 using namespace frm2png;
 
-
 void usage(std::string binaryName)
 {
-    std::cout << "FRM to PNG converter v0.1.0" << std::endl;
+    std::cout << "FRM to PNG converter v0.1.1" << std::endl;
     std::cout << "Copyright (c) 2015 Falltergeist developers" << std::endl;
     std::cout << "Usage: " << binaryName << " <FRM filename>" << std::endl;
+}
+
+void frmInfo(FrmFalloutFile* frm)
+{
+    std::cout << "=== FRM info ===" << std::endl;
+    std::cout << "Version: " << frm->version() << std::endl;
+    std::cout << "Frames per second: " << frm->framesPerSecond() << std::endl;
+    std::cout << "Action frame: " << frm->actionFrame() << std::endl;
+    std::cout << "Frames per direction: " << frm->framesPerDirection() << std::endl;
 }
 
 int main(int argc, char** argv)
@@ -59,9 +67,11 @@ int main(int argc, char** argv)
     {
         FrmFalloutFile frm(filename);
 
+        frmInfo(&frm);
+
+        // find maximum width and height
         unsigned maxWidth = frm.frames().at(0).at(0).width();
         unsigned maxHeight = frm.frames().at(0).at(0).height();
-
         for (unsigned i = 0; i != frm.frames().size(); ++i)
         {
             for (unsigned j = 0; j != frm.frames().at(i).size(); ++j)

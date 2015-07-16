@@ -33,9 +33,9 @@ namespace frm2png
 
 FrmFalloutFile::FrmFalloutFile(const std::string& filename) : FalloutFile(filename)
 {
-    uint32(); // version
-    uint16(); // frames per second
-    uint16(); // action frame
+    _version = uint32(); // version
+    _framesPerSecond = uint16(); // frames per second
+    _actionFrame = uint16(); // action frame
     _framesPerDirection = uint16();
 
     for (unsigned i = 0; i != 6; ++i)
@@ -87,9 +87,9 @@ FrmFalloutFile::FrmFalloutFile(const std::string& filename) : FalloutFile(filena
                     }
                     else
                     {
-                        uint8_t red = pallete.at(index).red * _colorModifier;
+                        uint8_t red   = pallete.at(index).red   * _colorModifier;
                         uint8_t green = pallete.at(index).green * _colorModifier;
-                        uint8_t blue = pallete.at(index).blue * _colorModifier;
+                        uint8_t blue  = pallete.at(index).blue  * _colorModifier;
                         frame.setPixel(x, y, Color(red, green, blue));
                     }
                 }
@@ -108,9 +108,24 @@ std::map<uint8_t, std::vector<FrmFrame>>& FrmFalloutFile::frames()
     return _frames;
 }
 
+uint16_t FrmFalloutFile::actionFrame()
+{
+    return _actionFrame;
+}
+
 uint16_t FrmFalloutFile::framesPerDirection()
 {
     return _framesPerDirection;
+}
+
+uint16_t FrmFalloutFile::framesPerSecond()
+{
+    return _framesPerSecond;
+}
+
+uint32_t FrmFalloutFile::version()
+{
+    return _version;
 }
 
 }

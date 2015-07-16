@@ -38,17 +38,29 @@ namespace frm2png
 
 class FrmFalloutFile : public FalloutFile
 {
-protected:
-    uint8_t _colorModifier = 4;
-    uint16_t _framesPerDirection;
-    // direction => frames
-    std::map<uint8_t, std::vector<FrmFrame>> _frames;
 public:
     FrmFalloutFile(const std::string& filename);
     virtual ~FrmFalloutFile();
 
     std::map<uint8_t, std::vector<FrmFrame>>& frames();
+
+    uint16_t actionFrame();
     uint16_t framesPerDirection();
+    uint16_t framesPerSecond();
+
+    uint32_t version();
+
+protected:
+    uint8_t _colorModifier = 4;
+
+    uint16_t _actionFrame;
+    uint16_t _framesPerDirection;
+    uint16_t _framesPerSecond;
+
+    uint32_t _version;
+
+    // direction => frames
+    std::map<uint8_t, std::vector<FrmFrame>> _frames;
 };
 
 }
