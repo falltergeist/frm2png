@@ -1,5 +1,7 @@
 frm2png [![Build Status](https://travis-ci.org/falltergeist/frm2png.svg?branch=develop)](https://travis-ci.org/falltergeist/frm2png)
 ==================
+*.frm to *.png converter for Fallout 1/2 data files.
+
 
 Installation:
 =============
