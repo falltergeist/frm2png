@@ -1,0 +1,15 @@
+Source: frm2png
+Section: utils
+Priority: optional
+Maintainer: Dmitry V. Alexeev <mail@alexeevdv.ru>
+Build-Depends: debhelper (>=9), cmake (>=2.8), libpng12-dev(>=1.2)
+Standards-Version: 3.9.6
+Homepage: https://github.com/falltergeist/frm2png
+Vcs-Git: git://github.com/falltergeist/frm2png.git
+Vcs-Browser: https://github.com/falltergeist/frm2png.git
+
+Package: frm2png
+Architecture: any
+Depends: libpng12
+Description: Fallout 1\2 *.frm to *.png converter
+ Fallout 1\2 *.frm to *.png converter
