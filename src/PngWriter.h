@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Falltergeist developers
+ * Copyright (c) 2015-2018 Falltergeist developers
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
@@ -20,11 +20,12 @@
  * IN THE SOFTWARE.
  */
 
-#ifndef FRM2PNG_PNGIMAGE_H
-#define FRM2PNG_PNGIMAGE_H
+#ifndef FRM2PNG_PNGWRITER_H
+#define FRM2PNG_PNGWRITER_H
 
 // C++ standard includes
-#include <cstdint>
+#include <fstream>
+#include <string>
 
 // frm2png includes
 
@@ -33,25 +34,22 @@
 
 namespace frm2png
 {
-class Color;
+    class PngImage;
 
-class PngImage
-{
-protected:
-    unsigned _width;
-    unsigned _height;
-    png_bytep* _rows = 0;
-public:
-    PngImage(unsigned width, unsigned height);
-    ~PngImage();
+    class PngWriter
+    {
+        public:
+            PngWriter(const std::string& filename);
+            ~PngWriter();
 
-    void setPixel(unsigned x, unsigned y, const Color& color);
+            void write(const PngImage& image);
+            static void writeCallback(png_structp png_struct, png_bytep data, png_size_t length);
+            static void flushCallback(png_structp png_ptr);
 
-    unsigned width() const;
-    unsigned height() const;
-
-    png_bytep* rows() const;
-};
-
+        protected:
+            std::ofstream _stream;
+            png_structp _png_struct;
+            png_infop _png_info;
+    };
 }
-#endif // FRM2PNG_PNGIMAGE_H
+#endif // FRM2PNG_PNGWRITER_H

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Falltergeist developers
+ * Copyright (c) 2015-2018 Falltergeist developers
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
@@ -20,48 +20,27 @@
  * IN THE SOFTWARE.
  */
 
-#ifndef FRM2PNG_FRMFALLOUTFILE_H
-#define FRM2PNG_FRMFALLOUTFILE_H
+#ifndef FRM2PNG_EXCEPTION_H
+#define FRM2PNG_EXCEPTION_H
 
 // C++ standard includes
-#include <map>
-#include <vector>
+#include <string>
 
 // frm2png includes
-#include "FalloutFile.h"
-#include "FrmFrame.h"
 
 // Third party includes
 
 namespace frm2png
 {
+    class Exception : public std::exception
+    {
+        public:
+            Exception(const std::string& message);
 
-class FrmFalloutFile : public FalloutFile
-{
-public:
-    FrmFalloutFile(const std::string& filename);
-    virtual ~FrmFalloutFile();
+            virtual const char* what() const throw();
 
-    std::map<uint8_t, std::vector<FrmFrame>>& frames();
-
-    uint16_t actionFrame();
-    uint16_t framesPerDirection();
-    uint16_t framesPerSecond();
-
-    uint32_t version();
-
-protected:
-    uint8_t _colorModifier = 4;
-
-    uint16_t _actionFrame;
-    uint16_t _framesPerDirection;
-    uint16_t _framesPerSecond;
-
-    uint32_t _version;
-
-    // direction => frames
-    std::map<uint8_t, std::vector<FrmFrame>> _frames;
-};
-
+        protected:
+            std::string _message;
+    };
 }
-#endif // FRM2PNG_FRMFALLOUTFILE_H
+#endif // FRM2PNG_EXCEPTION_H

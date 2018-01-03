@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Falltergeist developers
+ * Copyright (c) 2015-2018 Falltergeist developers
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
@@ -23,59 +23,54 @@
 // C++ standard includes
 
 // frm2png includes
-#include "Color.h"
-#include "PngImage.h"
+#include "Exception.h"
+#include "FrmFrame.h"
 
 // Third party includes
 
 namespace frm2png
 {
-
-PngImage::PngImage(unsigned width, unsigned height)
-{
-    _width = width;
-    _height = height;
-
-    _rows = new png_bytep[_height]();
-
-    for(unsigned y = 0; y != _height; ++y)
+    FrmFrame::FrmFrame(unsigned width, unsigned height)
     {
-        _rows[y] = new png_byte[_width*4]();
+        _width = width;
+        _height = height;
+        for(unsigned i = 0; i != _width * _height; ++i) {
+            _pixels.push_back(Color(0));
+        }
     }
-}
 
-PngImage::~PngImage()
-{
-    for(unsigned y = 0; y != _height; ++y)
+    FrmFrame::FrmFrame(const FrmFrame& other)
     {
-        delete [] _rows[y];
+        _width = other._width;
+        _height = other._height;
+        _pixels = other._pixels;
     }
-    delete [] _rows;
-}
 
-void PngImage::setPixel(unsigned x, unsigned y, const Color& color)
-{
-    if (x >= _width || y >= _height) return;
+    FrmFrame::~FrmFrame()
+    {
+    }
 
-    _rows[y][x*4] = color.red();
-    _rows[y][x*4 + 1] = color.green();
-    _rows[y][x*4 + 2] = color.blue();
-    _rows[y][x*4 + 3] = color.alpha();
-}
+    Color FrmFrame::pixel(unsigned x, unsigned y) const
+    {
+        if (x >= _width && y >= _height) {
+            throw Exception("FrmFrame::pixel() - out of borders");
+        }
 
-unsigned PngImage::width() const
-{
-    return _width;
-}
+        return _pixels.at(_width*y + x);
+    }
 
-unsigned PngImage::height() const
-{
-    return _height;
-}
+    void FrmFrame::setPixel(unsigned x, unsigned y, const Color& color)
+    {
+        _pixels.at(_width*y + x) = color;
+    }
 
-png_bytep* PngImage::rows() const
-{
-    return _rows;
-}
+    unsigned FrmFrame::width()
+    {
+        return _width;
+    }
 
+    unsigned FrmFrame::height()
+    {
+        return _height;
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Falltergeist developers
+ * Copyright (c) 2015-2018 Falltergeist developers
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
@@ -20,36 +20,60 @@
  * IN THE SOFTWARE.
  */
 
-#ifndef FRM2PNG_COLOR_H
-#define FRM2PNG_COLOR_H
-
 // C++ standard includes
-#include <cstdint>
 
 // frm2png includes
+#include "Color.h"
+#include "PngImage.h"
 
 // Third party includes
 
 namespace frm2png
 {
+    PngImage::PngImage(unsigned width, unsigned height)
+    {
+        _width = width;
+        _height = height;
 
-class Color
-{
-protected:
-    uint8_t _red = 0;
-    uint8_t _green = 0;
-    uint8_t _blue = 0;
-    uint8_t _alpha = 0;
-public:
-    Color(uint32_t rgba);
-    Color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
-    Color(const Color& other);
+        _rows = new png_bytep[_height]();
 
-    uint8_t red() const;
-    uint8_t green() const;
-    uint8_t blue() const;
-    uint8_t alpha() const;
-};
+        for(unsigned y = 0; y != _height; ++y) {
+            _rows[y] = new png_byte[_width*4]();
+        }
+    }
 
+    PngImage::~PngImage()
+    {
+        for(unsigned y = 0; y != _height; ++y) {
+            delete [] _rows[y];
+        }
+        delete [] _rows;
+    }
+
+    void PngImage::setPixel(unsigned x, unsigned y, const Color& color)
+    {
+        if (x >= _width || y >= _height) {
+            return;
+        }
+
+        _rows[y][x*4] = color.red();
+        _rows[y][x*4 + 1] = color.green();
+        _rows[y][x*4 + 2] = color.blue();
+        _rows[y][x*4 + 3] = color.alpha();
+    }
+
+    unsigned PngImage::width() const
+    {
+        return _width;
+    }
+
+    unsigned PngImage::height() const
+    {
+        return _height;
+    }
+
+    png_bytep* PngImage::rows() const
+    {
+        return _rows;
+    }
 }
-#endif // FRM2PNG_COLOR_H

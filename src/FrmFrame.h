@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Falltergeist developers
+ * Copyright (c) 2015-2018 Falltergeist developers
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
@@ -20,24 +20,36 @@
  * IN THE SOFTWARE.
  */
 
+#ifndef FRM2PNG_FRMFRAME_H
+#define FRM2PNG_FRMFRAME_H
+
 // C++ standard includes
+#include <vector>
 
 // frm2png includes
-#include "Exception.h"
+#include "Color.h"
 
 // Third party includes
 
 namespace frm2png
 {
+    class FrmFrame
+    {
+        public:
+            FrmFrame(unsigned width, unsigned height);
+            FrmFrame(const FrmFrame& other);
+            ~FrmFrame();
 
-Exception::Exception(const std::string& message)
-{
-    _message = message;
-}
+            Color pixel(unsigned x, unsigned y) const;
+            void setPixel(unsigned x, unsigned y, const Color& color);
 
-const char* Exception::what() const throw()
-{
-    return _message.c_str();
-}
+            unsigned width();
+            unsigned height();
 
+        protected:
+            unsigned _width;
+            unsigned _height;
+            std::vector<Color> _pixels;
+    };
 }
+#endif // FRM2PNG_FRMFRAME_H

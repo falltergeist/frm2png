@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Falltergeist developers
+ * Copyright (c) 2015-2018 Falltergeist developers
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
@@ -20,36 +20,31 @@
  * IN THE SOFTWARE.
  */
 
-#ifndef FRM2PNG_PNGWRITER_H
-#define FRM2PNG_PNGWRITER_H
+#ifndef FRM2PNG_FALLOUTFILE_H
+#define FRM2PNG_FALLOUTFILE_H
 
 // C++ standard includes
+#include <cstdint>
 #include <fstream>
-#include <string>
 
 // frm2png includes
 
 // Third party includes
-#include <png.h>
 
 namespace frm2png
 {
-class PngImage;
+    class FalloutFile
+    {
+        public:
+            FalloutFile(const std::string& filename);
+            virtual ~FalloutFile();
 
-class PngWriter
-{
-protected:
-    std::ofstream _stream;
-    png_structp _png_struct;
-    png_infop _png_info;
-public:
-    PngWriter(const std::string& filename);
-    ~PngWriter();
+            uint8_t uint8();
+            uint16_t uint16();
+            uint32_t uint32();
 
-    void write(const PngImage& image);
-    static void writeCallback(png_structp png_struct, png_bytep data, png_size_t length);
-    static void flushCallback(png_structp png_ptr);
-};
-
+        protected:
+            std::ifstream _stream;
+    };
 }
-#endif // FRM2PNG_PNGWRITER_H
+#endif // FRM2PNG_FALLOUTFILE_H

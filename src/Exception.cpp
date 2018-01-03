@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Falltergeist developers
+ * Copyright (c) 2015-2018 Falltergeist developers
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
@@ -20,33 +20,22 @@
  * IN THE SOFTWARE.
  */
 
-#ifndef FRM2PNG_FALLOUTFILE_H
-#define FRM2PNG_FALLOUTFILE_H
-
 // C++ standard includes
-#include <cstdint>
-#include <fstream>
 
 // frm2png includes
+#include "Exception.h"
 
 // Third party includes
 
 namespace frm2png
 {
+    Exception::Exception(const std::string& message)
+    {
+        _message = message;
+    }
 
-class FalloutFile
-{
-protected:
-    std::ifstream _stream;
-public:
-    FalloutFile(const std::string& filename);
-    virtual ~FalloutFile();
-
-    uint8_t uint8();
-    uint16_t uint16();
-    uint32_t uint32();
-
-};
-
+    const char* Exception::what() const throw()
+    {
+        return _message.c_str();
+    }
 }
-#endif // FRM2PNG_FALLOUTFILE_H

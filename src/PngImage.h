@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Falltergeist developers
+ * Copyright (c) 2015-2018 Falltergeist developers
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
@@ -20,58 +20,38 @@
  * IN THE SOFTWARE.
  */
 
+#ifndef FRM2PNG_PNGIMAGE_H
+#define FRM2PNG_PNGIMAGE_H
+
 // C++ standard includes
+#include <cstdint>
 
 // frm2png includes
-#include "Color.h"
 
 // Third party includes
+#include <png.h>
 
 namespace frm2png
 {
+    class Color;
 
-Color::Color(uint32_t rgba)
-{
-    _red   = ((rgba & 0xFF000000) >> 24);
-    _green = ((rgba & 0x00FF0000) >> 16);
-    _blue  = ((rgba & 0x0000FF00) >> 8);
-    _alpha =   rgba & 0x000000FF;
-}
+    class PngImage
+    {
+        public:
+            PngImage(unsigned width, unsigned height);
+            ~PngImage();
 
-Color::Color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
-{
-    _red = red;
-    _green = green;
-    _blue = blue;
-    _alpha = alpha;
-}
+            void setPixel(unsigned x, unsigned y, const Color& color);
 
-Color::Color(const Color& other)
-{
-    _red = other._red;
-    _green = other._green;
-    _blue = other._blue;
-    _alpha = other._alpha;
-}
+            unsigned width() const;
+            unsigned height() const;
 
-uint8_t Color::red() const
-{
-    return _red;
-}
+            png_bytep* rows() const;
 
-uint8_t Color::green() const
-{
-    return _green;
+        protected:
+            unsigned _width;
+            unsigned _height;
+            png_bytep* _rows = 0;
+    };
 }
-
-uint8_t Color::blue() const
-{
-    return _blue;
-}
-
-uint8_t Color::alpha() const
-{
-    return _alpha;
-}
-
-}
+#endif // FRM2PNG_PNGIMAGE_H

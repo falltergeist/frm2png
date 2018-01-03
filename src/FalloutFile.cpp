@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Falltergeist developers
+ * Copyright (c) 2015-2018 Falltergeist developers
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
@@ -31,46 +31,43 @@
 
 namespace frm2png
 {
-
-FalloutFile::FalloutFile(const std::string& filename)
-{
-    _stream.open(filename, std::ios_base::in | std::ios_base::binary);
-    if (!_stream.is_open())
+    FalloutFile::FalloutFile(const std::string& filename)
     {
-        throw Exception("FalloutFile::FalloutFile() - Can't open input file: " + filename);
+        _stream.open(filename, std::ios_base::in | std::ios_base::binary);
+        if (!_stream.is_open()) {
+            throw Exception("FalloutFile::FalloutFile() - Can't open input file: " + filename);
+        }
     }
-}
 
-FalloutFile::~FalloutFile()
-{
-    _stream.close();
-}
+    FalloutFile::~FalloutFile()
+    {
+        _stream.close();
+    }
 
-uint8_t FalloutFile::uint8()
-{
-    uint8_t value;
-    char* buff = reinterpret_cast<char*>(&value);
-    _stream.read(buff, 1);
-    return value;
-}
+    uint8_t FalloutFile::uint8()
+    {
+        uint8_t value;
+        char* buff = reinterpret_cast<char*>(&value);
+        _stream.read(buff, 1);
+        return value;
+    }
 
 
-uint16_t FalloutFile::uint16()
-{
-    uint16_t value;
-    char* buff = reinterpret_cast<char*>(&value);
-    _stream.read(buff, 2);
-    std::reverse(buff, buff + 2);
-    return value;
-}
+    uint16_t FalloutFile::uint16()
+    {
+        uint16_t value;
+        char* buff = reinterpret_cast<char*>(&value);
+        _stream.read(buff, 2);
+        std::reverse(buff, buff + 2);
+        return value;
+    }
 
-uint32_t FalloutFile::uint32()
-{
-    uint32_t value;
-    char* buff = reinterpret_cast<char*>(&value);
-    _stream.read(buff, 4);
-    std::reverse(buff, buff + 4);
-    return value;
-}
-
+    uint32_t FalloutFile::uint32()
+    {
+        uint32_t value;
+        char* buff = reinterpret_cast<char*>(&value);
+        _stream.read(buff, 4);
+        std::reverse(buff, buff + 4);
+        return value;
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Falltergeist developers
+ * Copyright (c) 2015-2018 Falltergeist developers
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
@@ -39,7 +39,7 @@ using namespace frm2png;
 void usage(std::string binaryName)
 {
     std::cout << "FRM to PNG converter v0.1.1" << std::endl;
-    std::cout << "Copyright (c) 2015 Falltergeist developers" << std::endl;
+    std::cout << "Copyright (c) 2015-2018 Falltergeist developers" << std::endl;
     std::cout << "Usage: " << binaryName << " <FRM filename>" << std::endl;
 }
 
@@ -54,8 +54,7 @@ void frmInfo(FrmFalloutFile* frm)
 
 int main(int argc, char** argv)
 {
-    if (argc != 2)
-    {
+    if (argc != 2) {
         usage(argv[0]);
         return 1;
     }
@@ -63,8 +62,7 @@ int main(int argc, char** argv)
     std::string filename = argv[1];
     std::string outname = filename.substr(0, filename.find('.')) + ".png";
 
-    try
-    {
+    try {
         FrmFalloutFile frm(filename);
 
         frmInfo(&frm);
@@ -72,10 +70,8 @@ int main(int argc, char** argv)
         // find maximum width and height
         unsigned maxWidth = frm.frames().at(0).at(0).width();
         unsigned maxHeight = frm.frames().at(0).at(0).height();
-        for (unsigned i = 0; i != frm.frames().size(); ++i)
-        {
-            for (unsigned j = 0; j != frm.frames().at(i).size(); ++j)
-            {
+        for (unsigned i = 0; i != frm.frames().size(); ++i) {
+            for (unsigned j = 0; j != frm.frames().at(i).size(); ++j) {
                 auto frame = frm.frames().at(i).at(j);
                 if (frame.width() > maxWidth) maxWidth = frame.width();
                 if (frame.height() > maxHeight) maxHeight = frame.height();
@@ -84,15 +80,11 @@ int main(int argc, char** argv)
 
         PngImage image(maxWidth*frm.framesPerDirection(), maxHeight*frm.frames().size());
 
-        for (unsigned i = 0; i != frm.frames().size(); ++i)
-        {
-            for (unsigned j = 0; j != frm.frames().at(i).size(); ++j)
-            {
+        for (unsigned i = 0; i != frm.frames().size(); ++i) {
+            for (unsigned j = 0; j != frm.frames().at(i).size(); ++j) {
                 auto frame = frm.frames().at(i).at(j);
-                for (unsigned y = 0; y != frame.height(); ++y)
-                {
-                    for (unsigned x = 0; x != frame.width(); ++x)
-                    {
+                for (unsigned y = 0; y != frame.height(); ++y) {
+                    for (unsigned x = 0; x != frame.width(); ++x) {
                         image.setPixel(maxWidth*j + x, maxHeight*i + y, frame.pixel(x, y));
                     }
                 }
@@ -101,9 +93,7 @@ int main(int argc, char** argv)
 
         PngWriter writer(outname);
         writer.write(image);
-    }
-    catch(Exception& e)
-    {
+    } catch(Exception& e) {
         std::cout << e.what() << std::endl;
         return 1;
     }
