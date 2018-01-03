@@ -22,7 +22,7 @@ Dependencies:
 -------------
 
 - CMake >= 2.8
-- libpng 1.2.* 
+- libpng >= 1.2 
 
 Build:
 
