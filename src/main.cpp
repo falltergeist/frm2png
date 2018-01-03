@@ -38,7 +38,7 @@ using namespace frm2png;
 
 void usage(std::string binaryName)
 {
-    std::cout << "FRM to PNG converter v0.1.1" << std::endl;
+    std::cout << "FRM to PNG converter v0.1.2" << std::endl;
     std::cout << "Copyright (c) 2015-2018 Falltergeist developers" << std::endl;
     std::cout << "Usage: " << binaryName << " <FRM filename>" << std::endl;
 }
