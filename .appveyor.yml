@@ -11,8 +11,9 @@ install:
 - set PATH=C:\MinGW\bin;%PATH%
 # Rename sh.exe as sh.exe in PATH interferes with MinGW
 - rename "C:\Program Files\Git\usr\bin\sh.exe" "sh2.exe"
-- mingw-get update
-- mingw-get install libpng
+- nuget install libpng-mingw-x86-master -Source https://ci.appveyor.com/nuget/libpng-7hwq4pmmrc48 &&
+- powershell -Command "move libpng*\* deps -force" &&
+- move deps\libpng16.a deps\libpng.a
 
 build_script:
 - mkdir build
