@@ -13,7 +13,7 @@ install:
 - rename "C:\Program Files\Git\usr\bin\sh.exe" "sh2.exe"
 
 # zlib is needed for libpng
-- nuget install zlib-mingw-x86-master -Source https://ci.appveyor.com/nuget/zlib-94hmpf3q011d
+- nuget install zlib-mingw-x86-master -Version 1.2.8.4 -Source https://ci.appveyor.com/nuget/zlib-shallow-x0n34b3pfq1b
 - ps: move zlib*\* deps -force
 - move deps\libzlibstatic.a deps\libz.a
 
