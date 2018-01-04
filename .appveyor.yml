@@ -12,6 +12,7 @@ install:
 # Rename sh.exe as sh.exe in PATH interferes with MinGW
 - rename "C:\Program Files\Git\usr\bin\sh.exe" "sh2.exe"
 - nuget install libpng-mingw-x86-master -Version 1.6.18.44 -Source https://ci.appveyor.com/nuget/libpng-7hwq4pmmrc48
+- mkdir deps
 - ps: move libpng*\* deps -force
 - move deps\libpng16_static.lib deps\png.lib
 
