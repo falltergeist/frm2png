@@ -21,7 +21,7 @@ install:
 build_script:
 - mkdir build
 - cd build
-- cmake -G "MinGW Makefiles" -DCMAKE_PREFIX_PATH=C:\MinGW -DCMAKE_BUILD_TYPE=%BUILD_TYPE% ..
+- cmake -G "MinGW Makefiles" -DCMAKE_PREFIX_PATH=C:\MinGW -DCMAKE_INCLUDE_PATH=../deps -DCMAKE_LIBRARY_PATH=../deps -DCMAKE_BUILD_TYPE=%BUILD_TYPE% ..
 - cmake --build . --config %BUILD_TYPE%
 
 artifacts:
