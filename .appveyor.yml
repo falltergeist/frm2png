@@ -16,7 +16,7 @@ install:
 - ps: move libpng*\* deps -force
 - cd deps
 - dir
-- move deps\libpng16_static.lib deps\png.lib
+#- move deps\libpng16_static.lib deps\png.lib
 
 build_script:
 - mkdir build
