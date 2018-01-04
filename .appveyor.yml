@@ -14,8 +14,8 @@ install:
 - nuget install libpng-mingw-x86-master -Version 1.6.18.44 -Source https://ci.appveyor.com/nuget/libpng-7hwq4pmmrc48
 - mkdir deps
 - ps: move libpng*\* deps -force
-- cd deps
-- dir
+#- cd deps
+#- dir
 #- move deps\libpng16_static.lib deps\png.lib
 
 build_script:
