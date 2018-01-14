@@ -17,3 +17,7 @@ compiler:
 install:
 - if [ "$TRAVIS_OS_NAME" == "linux" ]; then source ./travis/linux.install.sh; fi
 - if [ "$TRAVIS_OS_NAME" == "osx" ];   then source ./travis/osx.install.sh;   fi
+
+notifications:
+  webhooks:
+    - https://krake.one/travis-ci/402178084247306251/AhaJHo-Rb62wkQvhV0ox0tNsYcXWazfPlv8jHhYEWPalbmDrxK0IYuBCk992PuDgQcHZ
