@@ -2,6 +2,10 @@ version: 0.1.3-{build}
 image: Visual Studio 2017
 configuration: Release
 platform: x86
+
+before_build:
+  - nuget restore
+
 build:
   project: frm2png.sln
   verbosity: minimal
