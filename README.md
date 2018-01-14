@@ -1,4 +1,4 @@
-frm2png [![Build Status](https://travis-ci.org/falltergeist/frm2png.svg?branch=develop)](https://travis-ci.org/falltergeist/frm2png)
+frm2png [![Build Status](https://travis-ci.org/falltergeist/frm2png.svg?branch=develop)](https://travis-ci.org/falltergeist/frm2png) [![Version](https://img.shields.io/github/release/falltergeist/frm2png.svg)](https://github.com/falltergeist/frm2png/releases/latest) [![Discord](https://img.shields.io/discord/401990446747877376.svg)](https://discord.gg/jxs6WRq)
 ==================
 *.frm to *.png converter for Fallout 1/2 data files.
 
